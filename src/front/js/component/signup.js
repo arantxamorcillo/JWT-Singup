@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useHistory } from "react-router";
 import PropTypes from "prop-types";
 
-export const SingUp = ({ setVisibility, visibility }) => {
+export const SingUp = () => {
 	const [email, setEmail] = useState("");
 	const [password, setPassword] = useState("");
 	const [name, setName] = useState("");
+	const history = useHistory();
 
 	async function handleSubmit(event) {
 		event.preventDefault();
@@ -18,8 +19,7 @@ export const SingUp = ({ setVisibility, visibility }) => {
 				password: password
 			})
 		});
-
-		setVisibility(!visibility);
+		history.push("/login");
 	}
 
 	return (
@@ -35,9 +35,4 @@ export const SingUp = ({ setVisibility, visibility }) => {
 			</form>
 		</div>
 	);
-};
-
-SingUp.propTypes = {
-	visibility: PropTypes.number,
-	setVisibility: PropTypes.func
 };

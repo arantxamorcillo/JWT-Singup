@@ -1,14 +1,22 @@
 """
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
+import os
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User
+from api.models import User
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import JWTManager, create_access_token,jwt_required, get_jwt_identity
+import json
 
-jwt = JWTManager(app)
+from sqlalchemy import update
+from sqlalchemy import and_
+
+
+
+
 
 api = Blueprint('api', __name__)
+
 
 
 @api.route('/hello', methods=['POST', 'GET'])
@@ -45,3 +53,19 @@ def login():
     # create a new token with the user id inside
     access_token = create_access_token(identity=user.id)
     return jsonify({ "token": access_token, "user_id": user.id })
+
+@api.route ('/private', methods = ['GET'])
+@jwt_required()
+def get_info():
+    user_id = get_jwt_identity()
+    user = User.query.filter_by(id = user_id).first()
+    name = user.name
+    email = user.email
+    password = user.password
+    
+    print(user)
+  
+
+    
+    return jsonify({"name" : name , "email" : email, "password" :password})
+
